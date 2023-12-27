@@ -22,7 +22,10 @@ jib {
         platforms {
             platform {
                 os = "linux"
-                architecture = DefaultNativePlatform.getCurrentArchitecture().name.replace("aarch", "arm")
+                val current = DefaultNativePlatform.getCurrentArchitecture().name
+                architecture =
+                    if (current.contains("aarch") || current.contains("arm")) "arm64"
+                    else "amd64"
             }
         }
     }
