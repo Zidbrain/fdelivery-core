@@ -1,0 +1,31 @@
+services:
+  web:
+    image: fdelivery:latest
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    environment:
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      DATABASE_HOST: "host.docker.internal:5432"
+      STATIC_PATH: "/app/resources/static"
+    volumes:
+      - web_static:/app/resources/static
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./database:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_DB: fdelivery
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 1s
+volumes:
+  web_static:
+  db_data:
