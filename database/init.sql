@@ -220,6 +220,8 @@ CREATE TABLE public.settings (
 
 ALTER TABLE public.settings OWNER TO postgres;
 
+INSERT INTO public.settings(key, value) VALUES('deliveryFee', '100')
+
 --
 -- TOC entry 222 (class 1259 OID 16597)
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
